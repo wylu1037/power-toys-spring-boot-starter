@@ -1,2 +1,3 @@
 rootProject.name = 'power-toys-spring-boot-starter'
+include 'power-mysql-spring-boot-starter'
 
