@@ -1,4 +1,6 @@
-description = "power-knife4j-spring-boot-starter"
+group 'cn.edu.hust'
+version '1.0-SNAPSHOT'
+description "power-knife4j-spring-boot-starter"
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
