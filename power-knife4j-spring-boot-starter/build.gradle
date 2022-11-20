@@ -1,6 +1,7 @@
-description = "power-mysql-spring-boot-starter"
+description = "power-knife4j-spring-boot-starter"
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+	implementation 'com.github.xiaoymin:knife4j-spring-boot-starter'
 }

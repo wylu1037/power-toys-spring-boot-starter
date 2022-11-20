@@ -1,19 +1,80 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'java'
+	id 'io.spring.dependency-management' version "1.0.12.RELEASE"
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
 }
 
 group 'cn.edu.hust'
 version '1.0-SNAPSHOT'
+description 'power-toys-spring-boot-starter'
 
-repositories {
-    mavenCentral()
+allprojects {
+	repositories {
+		maven {
+			url = uri('https://maven.aliyun.com/nexus/content/groups/public/')
+			allowInsecureProtocol = true
+		}
+		mavenCentral()
+		mavenLocal()
+		gradlePluginPortal()
+	}
+
+	tasks.withType(JavaCompile) {
+		options.encoding("utf-8")
+	}
+
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+ext {
+	lib = [
+	        jupiter: '5.9.0',
+			knife4j: '2.0.7'
+	]
 }
 
-test {
-    useJUnitPlatform()
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'maven-publish'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	dependencyManagement {
+		imports {
+			mavenBom(SpringBootPlugin.BOM_COORDINATES)
+		}
+
+		dependencies {
+			dependency "org.junit.jupiter:junit-jupiter-api:${lib.jupiter}"
+			dependency "org.junit.jupiter:junit-jupiter-engine:${lib.jupiter}"
+			dependency "com.github.xiaoymin:knife4j-spring-boot-starter:${lib.knife4j}"
+		}
+	}
+
+	dependencies {
+		testImplementation 'org.junit.jupiter:junit-jupiter-api'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+		implementation 'org.springframework.boot:spring-boot-autoconfigure'
+		implementation 'org.springframework.boot:spring-boot-configuration-processor'
+	}
+
+	// 发布到本地
+	publishing {
+		publications {
+			maven(MavenPublication) {
+				groupId = "${project.group}"
+				artifactId = "${project.description}"
+				version = "${project.version}"
+				artifact jar
+			}
+		}
+
+		repositories {
+			mavenLocal()
+		}
+	}
 }
